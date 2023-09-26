@@ -21,3 +21,8 @@ XPath is an expression language to search for text inside HTML documents (simila
 - `//div[@class="full-script"]` will return divs with the class full script. Use `@` symbol before the atribute you are looking for
 - `//p[(@class="plot1") or (@class="plot2")]` will return p with both classes inside the square brackets
 - `//p[contains(@class, "plot")]` will return all ps with classes that contains the word "plot", so "plot2" would also be returned
+
+## Selenium
+Selenium usa algumas interações com códigos javascript para extrair informações da página através do navegador.
+
+Para isso, é necessário uma interface que vai traduzir os comandos do script para comandos que seriam executados em uma página(scroll, click, digitar em caixas de textos e/ou inputs). Essa interface é o webdriver e cada navegador tem seu próprio webdriver. Para esse curso, será usado o webdriver do Chrome. É importante saber qual a versão do chrome você está usando e se o webdriver é compatível com sua versão. Para versões mais novas do chrome, acesse esse [link](https://googlechromelabs.github.io/chrome-for-testing/#stable) e para versões não tão novas e/ou do tipo LTS, acesse esse [link](https://chromedriver.chromium.org/downloads).
