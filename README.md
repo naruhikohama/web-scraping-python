@@ -10,7 +10,7 @@ Lastly you have scrapy, which is fast but is a bit more difficult to program if 
 
 ## XPath
 
-XPath is an expression language to search for text inside HTML documents (similar to regex is for strings).
+XPath is an expression language to search for text inside HTML documents (similar to what regex is for strings).
 
 - `//h1` will return all h1 results
 - `//h1/text()` This ending (/text()) will return the text inside the node
