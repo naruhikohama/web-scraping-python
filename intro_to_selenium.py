@@ -1,5 +1,5 @@
 from selenium import webdriver 
-# from selenium.webdriver.common.by import By
+import pandas as pd
 from time import sleep
 
 def launchBrowser(website, webdriver_path):
@@ -26,12 +26,13 @@ def launchBrowser(website, webdriver_path):
 
         print(match.find_element('xpath', './td[4]').text)
 
+    df = pd.DataFrame({'date': date, 'home_team': home_team, 'score': score, 'away_team': away_team})
 
-        
+    df.to_csv('football_data.csv', index = False)
 
-    while True:
-        sleep(5)
-        pass
+    print(df)
+
+    driver.quit()
 
 website = 'https://www.adamchoi.co.uk/overs/detailed'  
 path = 'C:/Users/Naruhiko/Downloads/chromedriver/chromedriver-win32/chromedriver.exe'
