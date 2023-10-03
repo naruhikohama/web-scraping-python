@@ -1,4 +1,5 @@
 from selenium import webdriver 
+from selenium.webdriver.support.ui import Select
 import pandas as pd
 from time import sleep
 
@@ -10,6 +11,11 @@ def launchBrowser(website, webdriver_path):
 
     all_matches_button = driver.find_element('xpath', '//label[@analytics-event="All matches"]')
     all_matches_button.click()
+
+    dropdown = Select(driver.find_element('id', 'country'))
+    dropdown.select_by_visible_text('Brazil')
+
+    sleep(3)
 
     matches = driver.find_elements('tag name', 'tr')
 
