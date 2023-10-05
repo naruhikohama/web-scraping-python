@@ -26,3 +26,13 @@ XPath is an expression language to search for text inside HTML documents (simila
 Selenium usa algumas interações com códigos javascript para extrair informações da página através do navegador.
 
 Para isso, é necessário uma interface que vai traduzir os comandos do script para comandos que seriam executados em uma página(scroll, click, digitar em caixas de textos e/ou inputs). Essa interface é o webdriver e cada navegador tem seu próprio webdriver. Para esse curso, será usado o webdriver do Chrome. É importante saber qual a versão do chrome você está usando e se o webdriver é compatível com sua versão. Para versões mais novas do chrome, acesse esse [link](https://googlechromelabs.github.io/chrome-for-testing/#stable) e para versões não tão novas e/ou do tipo LTS, acesse esse [link](https://chromedriver.chromium.org/downloads).
+
+
+
+
+
+
+
+
+### Observações
+Para usar o script `scraping_multiple_pages_with_selenium` é necessário que você use uma VPN para acessar o site da audible dos EUA. Uma opção (que eu não testei, mas em pesquisas acabei encontrando) é o Proton VPN. Na sua versão gratuita, ele oferece localização do VPN para 5 países, um deles os EUA.
