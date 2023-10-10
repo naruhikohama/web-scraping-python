@@ -15,9 +15,10 @@ XPath is an expression language to search for text inside HTML documents (simila
 - `//h1` will return all h1 results
 - `//h1/text()` This ending (/text()) will return the text inside the node
 - `//h1[1]` will return the first h1 ocurrence
-- `//h1/div` will return the div that are children of h1
+- `//h1/div` will return all the divs that are direct children of h1
+- `//h1//div` will return all the divs that are children of h1, even if it is not a direct child of h1
 - `//h1/..` will return the parent of this node
-- `//h1/*` will return all the children nodes of this tag
+- `//h1/*` will return all direct children nodes of this tag
 - `//div[@class="full-script"]` will return divs with the class full script. Use `@` symbol before the atribute you are looking for
 - `//p[(@class="plot1") or (@class="plot2")]` will return p with both classes inside the square brackets
 - `//p[contains(@class, "plot")]` will return all ps with classes that contains the word "plot", so "plot2" would also be returned
