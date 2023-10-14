@@ -14,9 +14,9 @@ def get_tweet(element):
         tweet = element.find_element('xpath', './/article[contains(@data-testid, "tweet")]')
         user = element.find_element('xpath', './/div[contains(@data-testid, "User-Name")]//a//span[not(contains(text(),"@"))]/text()')
         user_at = element.find_element('xpath', './/div[contains(@data-testid, "User-Name")]//a//span[contains(text(),"@")]/text()')
-        return tweet.text, user, user_at
+        return user, user_at, tweet.text
     except:
-        return None
+        return None, None, ''
 
 load_dotenv()
 EMAIL = os.getenv('EMAIL')
@@ -48,9 +48,24 @@ password.send_keys(PASSWORD)
 login_button = driver.find_element('xpath', '//div[@data-testid = "LoginForm_Footer_Container"]//div[@role="button"]')
 login_button.click()
 
-search_button = driver.find_element('xpath', '//input[@enterkeyhint="search"]')
+search_button = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[@enterkeyhint="search"]')))
 search_button.send_keys('python')
 
 tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
+
+user_data = []
+user_at_data = []
+tweet_text_data = []
+
+for tweet in tweets:
+    user, user_at, tweet_text = get_tweet(tweet)
+    text = " ".join(tweet_text.split())
+    if user is not None:
+        user_data.append(user)
+        user_at_data.append(user_at)
+        tweet_text_data.append(text)
+
+df_tweets = pd.DataFrame({'user': user_data, 'user_at': user_at_data, 'tweet': tweet_text_data})
+df_tweets.to_csv('tweets.csv', index = False)
 
 sleep(10)
