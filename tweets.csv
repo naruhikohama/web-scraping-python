@@ -1,0 +1,6 @@
+user,user_at,tweet
+Akshay,@akshay_pachaar,"I have been coding in Python for 8 years now. If I were to start over today, here's a roadmap:"
+Matt Harrison,@__mharrison__,"I often teach about Decorators in Python. Many know how to use them, but few can write them. These are tricky because nested functions make our brains hurt. Here are some hints for grokking them. 1/"
+Kuba,@jakub_slys,"0, 1, 1, 2, 3, 5, 8, 13... do you know what's next?"
+TuringPost,@TheTuringPost,"Prepare to be amazed! This library contains a vast collection of algorithms implemented in Python. With an astonishing 171k stars on GitHub, it covers: - Arithmetic Analysis - Blockchain - Data Structures And much, much more."
+Pablo Galindo Salgado,@pyblogsal,"In the Cpython core dev sprint we have started a project to improve the CPython REPL for Python 3.13+ The first achievement is showing proper exceptions with source, error messages and locations in the REPL tracebacks. You can compare the before and after in these images:"

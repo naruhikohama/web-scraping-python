@@ -1,6 +1,8 @@
 from selenium import webdriver 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotInteractableException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
@@ -8,19 +10,22 @@ from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep 
 from dotenv import load_dotenv
 import os
+import pandas as pd
+
 
 def get_tweet(element):
     try:
-        tweet = element.find_element('xpath', './/article[contains(@data-testid, "tweet")]')
-        user = element.find_element('xpath', './/div[contains(@data-testid, "User-Name")]//a//span[not(contains(text(),"@"))]/text()')
-        user_at = element.find_element('xpath', './/div[contains(@data-testid, "User-Name")]//a//span[contains(text(),"@")]/text()')
-        return user, user_at, tweet.text
+        tweet = element.find_element('xpath', './/div[contains(@data-testid, "tweetText")]')
+        user = element.find_element('xpath', './/div[contains(@data-testid, "User-Name")]//a//span[not(contains(text(),"@"))]')
+        user_at = element.find_element('xpath', './/div[contains(@data-testid, "User-Name")]//a//span[contains(text(),"@")]')
+        return [user.text, user_at.text, tweet.text]
     except:
         return None, None, ''
 
 load_dotenv()
 EMAIL = os.getenv('EMAIL')
 PASSWORD = os.getenv('PASSWORD')
+TWITTER_USERNAME = os.getenv('TWITTER_USERNAME')
 
 website = 'https://twitter.com/'
 # path = 'C:/Users/Naruhiko/Downloads/chromedriver/chromedriver-win32/chromedriver.exe' 
@@ -42,6 +47,20 @@ login_box.send_keys(EMAIL)
 next_button = driver.find_element('xpath', '//div[@role = "button"]//span[contains(text(), "Avançar") or contains(text(), "Next")]')
 next_button.click()
 
+try:
+    print(f'Chegou ao começo do primeiro try\n')
+    password = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[contains(@name, "password")]')))
+    password.send_keys(PASSWORD)
+
+except (NoSuchElementException, TimeoutException, ElementNotInteractableException):
+    print(f'Chegou no primeiro except\n')
+    double_check = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//input[@autocomplete]")))
+    print(f'Chegou no segundo except e precisa enviar o username {TWITTER_USERNAME} para o campo\n')
+    double_check.send_keys(TWITTER_USERNAME)
+
+    next_button = driver.find_element('xpath', '//div[@role = "button"]//span[contains(text(), "Avançar") or contains(text(), "Next")]')
+    next_button.click()
+
 password = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[contains(@name, "password")]')))
 password.send_keys(PASSWORD)
 
@@ -50,6 +69,7 @@ login_button.click()
 
 search_button = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[@enterkeyhint="search"]')))
 search_button.send_keys('python')
+search_button.send_keys(Keys.ENTER)
 
 tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
 
@@ -58,7 +78,8 @@ user_at_data = []
 tweet_text_data = []
 
 for tweet in tweets:
-    user, user_at, tweet_text = get_tweet(tweet)
+    user, user_at, tweet_text = tuple(get_tweet(tweet))
+    print(f'{tweet_text}\n')
     text = " ".join(tweet_text.split())
     if user is not None:
         user_data.append(user)
