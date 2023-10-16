@@ -49,11 +49,13 @@ next_button.click()
 
 try:
     print(f'Chegou ao começo do primeiro try\n')
+    sleep(2)
     password = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[contains(@name, "password")]')))
     password.send_keys(PASSWORD)
 
 except (NoSuchElementException, TimeoutException, ElementNotInteractableException):
     print(f'Chegou no primeiro except\n')
+    sleep(2)
     double_check = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//input[@autocomplete]")))
     print(f'Chegou no segundo except e precisa enviar o username {TWITTER_USERNAME} para o campo\n')
     double_check.send_keys(TWITTER_USERNAME)
@@ -73,16 +75,21 @@ search_button.send_keys(Keys.ENTER)
 
 last_height = driver.execute_script("return document.body.scrollHeight")
 counter = 0
-while True or counter < 10: # scr9oll down 10 times
+tweets = []
+while counter < 20: # scroll down 20 times
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     sleep(3)
     new_height = driver.execute_script("return document.body.scrollHeight")
     counter += 1
+    print(f'Counter: {counter}')
     if new_height == last_height:
         break
     last_height = new_height
 
-tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
+    tweets_temp = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
+    if tweets_temp is not None:
+        tweets = list(set(tweets.extend(tweets_temp)))
+        print(f"Number of tweets: {len(tweets)}")
 
 user_data = []
 user_at_data = []
