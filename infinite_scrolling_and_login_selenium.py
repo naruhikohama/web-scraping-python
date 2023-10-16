@@ -71,6 +71,17 @@ search_button = WebDriverWait(driver, 5).until(EC.presence_of_element_located((B
 search_button.send_keys('python')
 search_button.send_keys(Keys.ENTER)
 
+last_height = driver.execute_script("return document.body.scrollHeight")
+counter = 0
+while True or counter < 10: # scr9oll down 10 times
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    sleep(3)
+    new_height = driver.execute_script("return document.body.scrollHeight")
+    counter += 1
+    if new_height == last_height:
+        break
+    last_height = new_height
+
 tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
 
 user_data = []
