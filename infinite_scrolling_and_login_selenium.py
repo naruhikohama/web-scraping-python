@@ -94,7 +94,7 @@ while counter < 20: # scroll down 20 times
     current_tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
     tweets = [tweet for tweet in current_tweets if tweet not in last_tweets]
     if tweets is not None:
-        print(f"Number of tweets: {len(tweets)}")
+        
         for tweet in tweets:
             user, user_at, tweet_text = tuple(get_tweet(tweet))
             print(f'{tweet_text}\n')
@@ -103,6 +103,8 @@ while counter < 20: # scroll down 20 times
                 user_data.append(user)
                 user_at_data.append(user_at)
                 tweet_text_data.append(text)
+        
+        print(f"Number of tweets: {len(tweets)} on iteration {counter}")
     
     last_tweets = tweets
 
