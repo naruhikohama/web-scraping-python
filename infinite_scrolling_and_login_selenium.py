@@ -57,9 +57,10 @@ except (NoSuchElementException, TimeoutException, ElementNotInteractableExceptio
     print(f'Chegou no primeiro except\n')
     sleep(2)
     double_check = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//input[@autocomplete]")))
-    print(f'Chegou no segundo except e precisa enviar o username {TWITTER_USERNAME} para o campo\n')
+    print(f'Precisa enviar o username {TWITTER_USERNAME} para o campo\n')
     double_check.send_keys(TWITTER_USERNAME)
 
+    sleep(1)
     next_button = driver.find_element('xpath', '//div[@role = "button"]//span[contains(text(), "Avançar") or contains(text(), "Next")]')
     next_button.click()
 
@@ -75,7 +76,11 @@ search_button.send_keys(Keys.ENTER)
 
 last_height = driver.execute_script("return document.body.scrollHeight")
 counter = 0
-tweets = []
+user_data = []
+user_at_data = []
+tweet_text_data = []
+last_tweets = []
+
 while counter < 20: # scroll down 20 times
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     sleep(3)
@@ -86,23 +91,20 @@ while counter < 20: # scroll down 20 times
         break
     last_height = new_height
 
-    tweets_temp = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
-    if tweets_temp is not None:
-        tweets = list(set(tweets.extend(tweets_temp)))
+    current_tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
+    tweets = [tweet for tweet in current_tweets if tweet not in last_tweets]
+    if tweets is not None:
         print(f"Number of tweets: {len(tweets)}")
-
-user_data = []
-user_at_data = []
-tweet_text_data = []
-
-for tweet in tweets:
-    user, user_at, tweet_text = tuple(get_tweet(tweet))
-    print(f'{tweet_text}\n')
-    text = " ".join(tweet_text.split())
-    if user is not None:
-        user_data.append(user)
-        user_at_data.append(user_at)
-        tweet_text_data.append(text)
+        for tweet in tweets:
+            user, user_at, tweet_text = tuple(get_tweet(tweet))
+            print(f'{tweet_text}\n')
+            text = " ".join(tweet_text.split())
+            if user is not None:
+                user_data.append(user)
+                user_at_data.append(user_at)
+                tweet_text_data.append(text)
+    
+    last_tweets = tweets
 
 df_tweets = pd.DataFrame({'user': user_data, 'user_at': user_at_data, 'tweet': tweet_text_data})
 df_tweets.to_csv('tweets.csv', index = False)
