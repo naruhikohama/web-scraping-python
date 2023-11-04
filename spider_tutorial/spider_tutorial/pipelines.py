@@ -6,8 +6,18 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+import logging
 
 
 class SpiderTutorialPipeline:
+    def open_spider(self, spider):
+        logging.warning(f"Spider opened from pipeline: {spider.name}")
+        # self.file = open('audible.jl', 'w')
+
+    def close_spider(self, spider):
+        logging.warning(f"Spider closed from pipeline: {spider.name}")
+        # self.file.close()
+
+    
     def process_item(self, item, spider):
         return item
