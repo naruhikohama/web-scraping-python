@@ -8,7 +8,8 @@ class AdamchoiSpider(scrapy.Spider):
 
     script = """
     function main(splash, args)
-    splash.private_mode_enabled = false
+      splash:set_user_agent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 OPR/104.0.0.0')
+      splash.private_mode_enabled = false
       assert(splash:go(args.url))
       assert(splash:wait(1))
       all_matches = assert(splash:select_all('label.btn.btn-sm.btn-primary'))
@@ -35,4 +36,17 @@ class AdamchoiSpider(scrapy.Spider):
         )
 
     def parse(self, response):
-        print(response.body)
+        response.xpath('//tr')
+
+        for row in response.xpath('//tr'):
+            date = row.xpath('./td[1]/text()').get()
+            home_team = row.xpath('./td[2]/text()').get()
+            score = row.xpath('./td[3]/text()').get()
+            away_team = row.xpath('./td[4]/text()').get()
+
+            yield {
+                'date': date,
+                'home_team': home_team,
+                'score': score,
+                'away_team': away_team
+            }
